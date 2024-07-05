@@ -21,18 +21,21 @@
         <gradio-lite>
             <gradio-file name="app.py" entrypoint>
 import gradio as gr
-
 from filters import as_gray
 
-def process(input_image):
+PASSWORD = "your_password"  # Set your password here
+
+def process(input_image, password):
+    if password != PASSWORD:
+        return "Incorrect password", None
     output_image = as_gray(input_image)
-    return output_image
+    return None, output_image
 
 demo = gr.Interface(
     process,
-    "image",
-    "image",
-    examples=["lion.jpg", "logo.png"],
+    inputs=[gr.inputs.Image(type="numpy"), gr.inputs.Textbox(type="password", placeholder="Enter password")],
+    outputs=[gr.outputs.Textbox(), gr.outputs.Image(type="numpy")],
+    examples=[["lion.jpg", PASSWORD], ["logo.png", PASSWORD]],
 )
 
 demo.launch()
@@ -54,4 +57,4 @@ scikit-image
             </gradio-requirements>
         </gradio-lite>
     </body>
-</html>
+            </html>
